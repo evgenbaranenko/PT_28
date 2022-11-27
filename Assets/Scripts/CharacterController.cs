@@ -23,7 +23,7 @@ public class CharacterController : MonoBehaviour
     {
         ApplyMovingForce();
     }
-        
+
 
     //Коллайдер персонажа прекращает взаимодействие с каким-то другим коллайдером
     private void OnCollisionExit(Collision collision)
@@ -33,9 +33,9 @@ public class CharacterController : MonoBehaviour
     //Коллайдер персонажа начинает взаимодействие с каким-то другим коллайдером
     private void OnCollisionStay(Collision collision)
     {
-        onGround = CheckIsOnGround(collision);
+        if (collision.collider.CompareTag("Ground"))
+            onGround = CheckIsOnGround(collision);
     }
-
 
     //Проверяем, подходит ли поверхность коллайдера для того, чтобы персонаж на ней стоял.
     //Объект Collision для проверки.
@@ -58,10 +58,18 @@ public class CharacterController : MonoBehaviour
     //зчитуємо поточні натискання WSAD
     public void ApplyMovingForce()
     {
-        animator.SetFloat("vSpeed", Input.GetAxis("Vertical"));
-        animator.SetFloat("hSpeed", Input.GetAxis("Horizontal"));
+        if (onGround)
+        {
+            animator.SetFloat("vSpeed", Input.GetAxis("Vertical"));
+            animator.SetFloat("hSpeed", Input.GetAxis("Horizontal"));
+        }
     }
-       
+
+    //викликаеться за допомогою подіі анімаціі (Jump)
+    public void ApplyJumpForce()
+    {
+        _rigidbody?.AddForce(Vector3.up * jumpForce); Debug.Log(_rigidbody); 
+    }
     public void ApplyJump()
     {
         if (onGround)  //якщо стоїмо на землі
@@ -73,26 +81,24 @@ public class CharacterController : MonoBehaviour
             {
                 animator.SetTrigger("jump");
 
-                _rigidbody?.AddForce(Vector3.up * jumpForce); Debug.Log(_rigidbody);
+               
             }
 
             animator.SetBool("inAir", false);
         }
         else
         {
-            transform.Translate(new
-            Vector3(Input.GetAxis("Horizontal") * 0.1f, 0, Input.GetAxis("Vertical") * 0.1f));
+            transform.Translate(
+            new Vector3(Input.GetAxis("Horizontal") * 0.1f, 0, Input.GetAxis("Vertical") * 0.1f));
 
             animator.applyRootMotion = false;
 
             animator.SetBool("inAir", true);
         }
     }
-           
-                
     void Update()
     {
         ApplyJump();
-        Debug.Log(_rigidbody);
+        
     }
 }
