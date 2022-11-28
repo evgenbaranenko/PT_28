@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    private Animator animator;
+    private Animator _animator;
     private bool onGround = false;
     private float jumpForce = 200f;
     private Rigidbody _rigidbody;
@@ -12,8 +12,9 @@ public class CharacterController : MonoBehaviour
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
+       
     }
     void Start()
     {
@@ -23,7 +24,12 @@ public class CharacterController : MonoBehaviour
     {
         ApplyMovingForce();
     }
-
+    void Update()
+    {
+       
+        ApplyJump();
+       
+    }
 
     //Коллайдер персонажа прекращает взаимодействие с каким-то другим коллайдером
     private void OnCollisionExit(Collision collision)
@@ -60,45 +66,38 @@ public class CharacterController : MonoBehaviour
     {
         if (onGround)
         {
-            animator.SetFloat("vSpeed", Input.GetAxis("Vertical"));
-            animator.SetFloat("hSpeed", Input.GetAxis("Horizontal"));
+            _animator.SetFloat("vSpeed", Input.GetAxis("Vertical"));
+            _animator.SetFloat("hSpeed", Input.GetAxis("Horizontal"));
         }
     }
 
     //викликаеться за допомогою подіі анімаціі (Jump)
     public void ApplyJumpForce()
     {
-        _rigidbody?.AddForce(Vector3.up * jumpForce); Debug.Log(_rigidbody); 
+        _rigidbody?.AddForce(Vector3.up * jumpForce); Debug.Log(_rigidbody);
     }
     public void ApplyJump()
     {
         if (onGround)  //якщо стоїмо на землі
         {
-            animator.applyRootMotion = true;
+            _animator.applyRootMotion = true;
 
             if (Input.GetKeyDown(KeyCode.Space))
             //Якщо гравець натиснув "пробіл"
             {
-                animator.SetTrigger("jump");
-
-               
+                _animator.SetTrigger("jump");
             }
 
-            animator.SetBool("inAir", false);
+            _animator.SetBool("inAir", false);
         }
         else
         {
             transform.Translate(
             new Vector3(Input.GetAxis("Horizontal") * 0.1f, 0, Input.GetAxis("Vertical") * 0.1f));
 
-            animator.applyRootMotion = false;
+            _animator.applyRootMotion = false;
 
-            animator.SetBool("inAir", true);
+            _animator.SetBool("inAir", true);
         }
-    }
-    void Update()
-    {
-        ApplyJump();
-        
     }
 }
