@@ -62,6 +62,7 @@ public class CameraControl : MonoBehaviour
         _camera.transform.rotation =
         Quaternion.Lerp(_camera.transform.rotation, cameraRotation, cameraSmoothing);
 
+        #region Test Code
         //gun.transform.rotation = _camera.transform.rotation;
         //gun.transform.rotation = Quaternion.Euler(cameraTargetPosition);
         //gun.transform.parent.parent.rotation = Quaternion.Euler(cameraTargetPosition);
@@ -71,10 +72,12 @@ public class CameraControl : MonoBehaviour
         //gun.transform.parent.parent.rotation = Quaternion.Euler(_camera.transform.rotation.x,
         //    _camera.transform.rotation.y, _camera.transform.rotation.z);
 
-        gun.transform.parent.parent.rotation = _camera.transform.rotation;
         //gun.transform.parent.parent.rotation.eulerAngles.x = _camera.transform.rotation.eulerAngles.x;
 
         //gun.transform.rotation =
-        //    Quaternion.Euler(1 - cameraRotation.x, 1 - cameraRotation.y, 1 - cameraRotation.z);
+        //    Quaternion.Euler(1 - cameraRotation.x, 1 - cameraRotation.y, 1 - cameraRotation.z)
+        #endregion
+
+        gun.transform.parent.parent.rotation = _camera.transform.rotation;
     }
 }
