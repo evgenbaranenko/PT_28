@@ -9,12 +9,14 @@ public class CharacterController : MonoBehaviour
     private float jumpForce = 200f;
     private Rigidbody _rigidbody;
     private float maxSlope = 30f;   //Максимальный уклон, по которому может идти персонаж
+    private GameObject gun;
+    public GameObject Gun { get; set; }
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
-       
+
     }
     void Start()
     {
@@ -26,9 +28,9 @@ public class CharacterController : MonoBehaviour
     }
     void Update()
     {
-       
+
         ApplyJump();
-       
+
     }
 
     //Коллайдер персонажа прекращает взаимодействие с каким-то другим коллайдером
@@ -74,7 +76,7 @@ public class CharacterController : MonoBehaviour
     //викликаеться за допомогою подіі анімаціі (Jump)
     public void ApplyJumpForce()
     {
-        _rigidbody?.AddForce(Vector3.up * jumpForce); Debug.Log(_rigidbody);
+        _rigidbody?.AddForce(Vector3.up * jumpForce); 
     }
     public void ApplyJump()
     {
