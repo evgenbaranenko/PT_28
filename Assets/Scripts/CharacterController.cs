@@ -12,11 +12,14 @@ public class CharacterController : MonoBehaviour
     private GameObject gun;
     public GameObject Gun { get; set; }
 
+    [SerializeField] private Transform RightHandPlace;
+    [SerializeField] private Transform LeftHandPlace;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
-
+        gun = GameObject.Find("Gun"); 
     }
     void Start()
     {
@@ -31,6 +34,32 @@ public class CharacterController : MonoBehaviour
 
         ApplyJump();
 
+    }
+
+    public void OnAnimatorIK()
+    {
+        //////Ліва рука:
+
+        //Встановлюємо вагу положення та обертання
+        _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+        _animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+        //призначаємо положення та обертання
+        _animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandPlace.position);
+        _animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandPlace.rotation);
+        //////Права рука:
+        //встановлюємо ваги
+        _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+        _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
+        //Встановлюємо положення та обертання
+        _animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandPlace.position);
+        _animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandPlace.rotation);
+
+        //////Голова:
+
+        //встановлюємо вагу
+        _animator.SetLookAtWeight(0);
+        // задаємо напрям погляду
+        _animator.SetLookAtPosition(gun.transform.position + (gun.transform.forward * 10));
     }
 
     //Коллайдер персонажа прекращает взаимодействие с каким-то другим коллайдером
